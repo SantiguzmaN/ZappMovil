@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar hideBackButton="true">
+      <ion-title>Metodo de Pago ZAPP</ion-title>
+      <ion-buttons end>
+          <button ion-button icon-right (click)="goDashboard()"> <ion-icon name="arrow-round-back"></ion-icon></button>
+      </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+       
+<form #formPayment="ngForm">
+
+
+  <ion-list no-lines padding-top class="form-content" style="text-align: center">
+    <button ion-button  *ngIf="user.saldo >1999 " color="indigo">tu saldo actual es ${{user.saldo}}</button> 
+    <button ion-button *ngIf="user.saldo <2000 " style="background:#bb2124">tu saldo actual es ${{user.saldo}}</button> 
+    <br>
+    <br>
+
+    <ion-label color="indigo">Digita el CODIGO DE TU</ion-label>
+    <ion-label color="indigo">TARJETA ZAPP</ion-label>
+    
+    <ion-item class="form-group">
+      <ion-input type="text" name="code" #message="ngModel" [(ngModel)]="code" maxlength="19" required></ion-input>
+    </ion-item>  
+
+    <button ion-button block color="indigo" round (click)="getValueCode()"  [disabled]="!formPayment.form.valid">Validar</button>
+    
+
+  
+    <!--<img src="assets/icon/nequi.png" width="96" height="96"/>-->
+
+
+
+
+    
+
+
+    
+
+  </ion-list>
+  
+
+</form>
+
+</ion-content>

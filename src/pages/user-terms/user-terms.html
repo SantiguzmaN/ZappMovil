@@ -1,0 +1,42 @@
+<ion-header >
+    <ion-navbar  *ngIf="!identity" hideBackButton="true">
+      <ion-title>TÉRMINOS Y CONDICIONES ZAPP </ion-title>
+      <ion-buttons end>
+            <button ion-button icon-right (click)="registerPage()"> <ion-icon name="arrow-round-back"></ion-icon></button>
+        </ion-buttons>
+    </ion-navbar>
+    <ion-navbar  *ngIf="identity" hideBackButton="true">
+      <ion-title>TÉRMINOS Y CONDICIONES </ion-title>
+      <ion-buttons end>
+            <button ion-button icon-right (click)="dashBoard()"> <ion-icon name="arrow-round-back"></ion-icon></button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+        <h3>Última actualización: 25 Octubre 2019</h3>
+        <h3>ZAPP (Zonas Autonomas de Parqueo Permitido)</h3>
+
+        <p>Las presentes Condiciones de uso y vinculación regulan el acceso o uso que usted haga,
+        como persona de nuestras aplicaciones, páginas web, contenido, productos y servicios (los
+        “Servicios”) puestos a disposición por ZAPP SAS . al que llamaremos en adelante ZAPP, el 
+        cual funciona como empresa con razón social ZONAS AUTONOMAS DE PARQUEO PERMITIDO  Nit XXXXXXX
+        </p>
+    
+        <p>LEA ESTAS CONDICIONES DETENIDAMENTE ANTES DE ACCEDER O USAR LOS SERVICIOS.</p>
+    
+        <p>Mediante su acceso y uso de los Servicios usted acuerda vincularse jurídicamente por estas
+        Condiciones, que establecen una relación contractual entre usted y ZAPP. Si usted no
+        acepta estas Condiciones, no podrá acceder o usar los Servicios. Estas Condiciones
+        sustituyen expresamente los acuerdos o compromisos previos con usted. ZAPP podrá poner
+        fin de inmediato a estas Condiciones o cualquiera de los Servicios respecto de usted o, en
+        general, dejar de ofrecer o denegar el acceso a los Servicios o cualquier parte de ellos, en
+        cualquier momento y por cualquier motivo.
+        </p>
+    
+       
+        <p><br></p>
+        <p><br></p>
+      
+    
+</ion-content>
