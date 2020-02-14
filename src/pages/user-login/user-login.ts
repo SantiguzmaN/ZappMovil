@@ -48,7 +48,7 @@ export class UserLogin {
     // Loguear al usuario y conseguir el objeto
     //start loading
     let loader = this.loadingCtrl.create({
-      content: "Cargando ZIPP...",
+      content: "Cargando Zonas de Parqueo...",
       duration: 4000
     });
     loader.present();

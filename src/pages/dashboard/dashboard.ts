@@ -306,7 +306,7 @@ ngDoCheck(){
                         '<p><strong>Dirección: </strong>'+ zonazipp.address + '</p>' + 
                         '<p><strong>Número de espacios: </strong>'+ zonazipp.number_spaces + '</p>' +
                         '<p><strong>Costo por hora: </strong>$'+ zonazipp.price + '</p>' +
-                        '<button class="iw-button" id="gMaps">Ver zipp</button>'+
+                        '<button class="iw-button" id="gMaps" style="background-color: indigo; color:white ;">Ver zona</button>'+
                       '</div>'+
                       '<div class="iw-bottom-gradient"></div>' +
                     '</div>';

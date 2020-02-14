@@ -46,8 +46,10 @@ export class UserService{
 			this._http.post(this.url+'login_conductor',params,optionspost)
 			.subscribe(res=>{
 			  resolve(res);
+			  console.log('retorno');
 			},(err)=>{
 			  resolve(err);
+			  console.log('error');
 			});
 		});
 		

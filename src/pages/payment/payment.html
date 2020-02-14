@@ -13,7 +13,7 @@
 
 
   <ion-list no-lines padding-top class="form-content" style="text-align: center">
-    <button ion-button  *ngIf="user.saldo >1999 " color="indigo">tu saldo actual es ${{user.saldo}}</button> 
+    <button ion-button  *ngIf="user.saldo >1999 " style="background-color: indigo; color:white ;">tu saldo actual es ${{user.saldo}}</button> 
     <button ion-button *ngIf="user.saldo <2000 " style="background:#bb2124">tu saldo actual es ${{user.saldo}}</button> 
     <br>
     <br>
@@ -25,7 +25,7 @@
       <ion-input type="text" name="code" #message="ngModel" [(ngModel)]="code" maxlength="19" required></ion-input>
     </ion-item>  
 
-    <button ion-button block color="indigo" round (click)="getValueCode()"  [disabled]="!formPayment.form.valid">Validar</button>
+    <button ion-button block color="indigo" round (click)="getValueCode()"  [disabled]="!formPayment.form.valid" style="background-color: indigo; color:white ;">Validar</button>
     
 
   
