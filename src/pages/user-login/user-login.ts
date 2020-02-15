@@ -27,14 +27,12 @@ export class UserLogin {
   constructor(public navCtrl: NavController, 
               private _userService: UserService,
               public alertCtrl: AlertController,
-               
               public loadingCtrl: LoadingController) 
   {
     this.user = new User('','','','','','','ROLE_CONDUCTOR','','',true,'0','');
   }
   
-  ionViewDidLoad() {
-    
+  ionViewDidLoad() { 
     console.log('despues de eliminar'+localStorage.length);
     console.log('¡UserLogin cargado!');
     
@@ -52,14 +50,10 @@ export class UserLogin {
       duration: 4000
     });
     loader.present();
-
-
     this._userService.signin(this.user).then(
       (response) => {
-
         this.identity = JSON.parse(response["_body"]);
         this.identity = this.identity.user;
-        
         if (!this.identity || !this.identity._id) {
           // Start alert register ok 
           let confirm = this.alertCtrl.create({
@@ -77,12 +71,9 @@ export class UserLogin {
           confirm.present();
           // End alert new register
         }else{
-
           this.identity.password = '';
           localStorage.setItem('identity', JSON.stringify(this.identity));
-
           this.navCtrl.setRoot(Dashboard); 
-
         }
       },
       error => {
@@ -91,7 +82,7 @@ export class UserLogin {
           // Start alert error 
           let confirm = this.alertCtrl.create({
             title: 'Ops!',
-            message: 'El documento de identidad o la contraseña son incorrectos, vuelve a intentarlo.',
+            message: 'error accediendo al servidor, vuelva a intentarlo',
             buttons: [
               {
                 text: 'Aceptar',
@@ -102,11 +93,8 @@ export class UserLogin {
             ]
           });
           confirm.present();
-          // End alert new register
         }
       }
     );
   }
-
-
 }

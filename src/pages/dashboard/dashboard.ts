@@ -111,6 +111,7 @@ export class Dashboard {
     this.geoCode(this.geo);
     this.placeid = this.location.place_id
   }
+  //Metodo para cargar el mapa en el lugar de la lista que el usuario selecciono
   GoTo(){
     return window.location.href = 'https://www.google.com/maps/place/?q=place_id:'+this.placeid;
   }
@@ -244,12 +245,7 @@ ngDoCheck(){
     });
   }
 
-  
-
-
-
-
-  // Metodo para obtener las Zonas ZIPP para refrescar la base de datos
+  // Metodo para obtener las Zonas para refrescar el mapa con las zonas disponibles 
   getZonasZipp(){
     this._zonazippService.getZonasZipp().subscribe(
       (response) => {

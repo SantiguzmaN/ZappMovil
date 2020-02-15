@@ -16,20 +16,15 @@ export class ZippService{
 		this.url = GLOBAL.url;
 	}
 
-	// Metodo para obtener el lsitado de las zonas ZIPP desde la base de datos de mongo
+	// Metodo para obtener el lsitado de las zonas desde el web service en nodejs
     getZonasZipp(){
-
 		this.headersPost = new Headers({'Content-Type':'application/json',
 										'Access-Control-Allow-Origin':'*'
 		});
-
 		let optionspost = new RequestOptions({
 			headers: this.headersPost
 		})
-
 		return this._http.get(this.url+'zonaszipp', optionspost).map(res => res.json());
-		
-		
 	}
 	
 	// Metodo para obtener una sola zona ZIPP
