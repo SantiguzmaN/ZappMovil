@@ -26,7 +26,7 @@ export class ZippService{
 		})
 		return this._http.get(this.url+'zonaszipp', optionspost).map(res => res.json());
 	}
-	
+
 	// Metodo para obtener una sola zona ZIPP
     getZonaZipp(id){
         return this._http.get(this.url+'zonazipp/'+id).map(res => res.json());
@@ -69,7 +69,7 @@ export class ZippService{
         return this._http.put(this.url+'zonazippact/'+id, params, optionspost)
                          .map(res => res.json());
     }
-	
+
 	// Metodo para reservar zona zipp
 	reservaZonaZipp(reservazona){
 	let params = JSON.stringify(reservazona);
@@ -80,8 +80,8 @@ export class ZippService{
 	let optionspost = new RequestOptions({
 		headers: this.headersPost
 	})
-	
-	return this._http.post(this.url+'reservazonazipp', params, optionspost)
+
+	return this._http.post(this.url+'reservazonazapp', params, optionspost)
 					 .map(res => res.json());
 	}
 
@@ -99,12 +99,12 @@ export class ZippService{
 
 		return this._http.put(this.url+'actualizareserva/'+reserva_to_update._id, params,optionspost).map(res => res.json());
 		}
-	
-	
+
+
 	getReservasZippByUser(id){
-        return this._http.get(this.url+'reservaszippbyuser/'+id).map(res => res.json());
+        return this._http.get(this.url+'reservaszappbyuser/'+id).map(res => res.json());
 	}
-	
+
 	getReservas(){
 		this.headersPost = new Headers({'Content-Type':'application/json',
 										'Access-Control-Allow-Origin':'*'
@@ -114,9 +114,9 @@ export class ZippService{
 			headers: this.headersPost
 		})
 
-		return this._http.get(this.url+'reservaszipp',optionspost).map(res => res.json());
+		return this._http.get(this.url+'reservaszapp',optionspost).map(res => res.json());
 	}
 
 
-	
+
 }

@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-navbar hideBackButton="true"> 
+    <ion-navbar hideBackButton="true">
         <ion-title>Zona ZAPP</ion-title>
         <ion-buttons end>
             <button ion-button icon-right (click)="goDashboard()"> <ion-icon name="arrow-round-back"></ion-icon></button>
@@ -8,23 +8,23 @@
 </ion-header>
 <!-- interfaz reada a base de grids para generar minitablas para mostrar la informacion de la zona zip-->
 <ion-content align="center">
-    
-    
-        <img src="{{zonazipp.image_zona_zipp}}" 
+
+
+        <img src="{{zonazipp.image_zona_zipp}}"
              style="width:300px;
                     height:179px;
-                    max-width:300px; 
+                    max-width:300px;
                     max-height: 179px"
 
         />
-    
-        <ion-navbar> 
+
+        <ion-navbar>
                 <ion-label style="color: white;font-size: 1em;padding:0%">{{zonazipp.address}}, {{zonazipp.city}} </ion-label>
                 <ion-label style="color: white;font-size: 1em;padding:0%"> {{zonazipp.description}} </ion-label>
          </ion-navbar>
 
         <!-- en esta zona se visualiza estrellas segun la calificacion -->
-        
+
         <ion-grid no-padding>
             <ion-row style="text-align: center">
                 <ion-col>
@@ -36,11 +36,11 @@
                         <button style="background:transparent; padding: 0%"   >
                             <img src="assets/icon/estrella.png" style="width: 27px;height : 27px"/>
                         </button>
-         
+
                         <button style="background:transparent; padding: 0%"  >
                             <img src="assets/icon/estrella.png" style="width: 27px;height : 27px"/>
                         </button>
-       
+
                         <button style="background:transparent; padding: 0%"  >
                             <img src="assets/icon/estrella.png" style="width: 27px;height : 27px"/>
                         </button>
@@ -61,7 +61,7 @@
                     <ion-label style="color:indigo;font-size: 1em; text-align: right;">Servicios Adicionales</ion-label>
                 </ion-col>
                 <ion-col>
-                    <ion-buttons align="center" style="text-align:left"> 
+                    <ion-buttons align="center" style="text-align:left">
                         <button *ngIf="security_guard == true" style="background:transparent; padding: 0%">
                             <img src="assets/icon/seguridad.png" style="width: 23px;height : 23px"/>
                         </button>
@@ -69,7 +69,7 @@
                         <button *ngIf="roofed == true" style="background:transparent; padding: 0%">
                             <img src="assets/icon/techo.png" style="width: 23px;height : 23px"/>
                         </button>
-        
+
                         <button *ngIf="cctv == true" style="background:transparent; padding: 0%">
                             <img src="assets/icon/vigilancia.png" style="width: 23px;height : 23px"/>
                         </button>
@@ -80,59 +80,59 @@
 
                         <button *ngIf="leave_key == true" style="background:transparent; padding: 0%">
                             <img src="assets/icon/llaves.png" style="width: 23px;height : 23px"/>
-                        </button> 
+                        </button>
 
-                        <button *ngIf="electric_station == true" style="background:transparent; padding: 0%"> 
+                        <button *ngIf="electric_station == true" style="background:transparent; padding: 0%">
                             <img src="assets/icon/electrog.png" style="width: 23px;height : 23px"/>
                         </button>
                     </ion-buttons>
                 </ion-col>
-            
+
         </ion-row>
 </ion-grid>
 
 
-    
-        
+
+
 
         <ion-grid style="border:solid indigo ; size:xx-small">
             <ion-row style="text-align: center">
                 <ion-col style="background:indigo ;text-align: center ; padding-bottom: 0px">
-                    <ion-buttons align="center" round style="padding-bottom:2px"> 
+                    <ion-buttons align="center" round style="padding-bottom:2px">
                         <button *ngIf="motorcycle_type == true"  style="background:transparent">
-                             <img  src="assets/icon/moto.png" style="width: 45px; 
-                                    height : 24px; 
+                             <img  src="assets/icon/moto.png" style="width: 45px;
+                                    height : 24px;
                                     max-width: 45px;
                                     max-height: 24px;
-                                    border-radius: 50px; 
+                                    border-radius: 50px;
                                     background: white;
-                                    text-align: right;" />   
+                                    text-align: right;" />
                         </button>
 
                         <button *ngIf="bike_type == true" round  style="background:transparent">
-                            <img  src="assets/icon/bicicleta.png" style="width: 45px; 
-                                    height : 24px; 
+                            <img  src="assets/icon/patineta.png" style="width: 45px;
+                                    height : 24px;
                                     max-width: 45px;
                                     max-height: 24px;
-                                    border-radius: 50px; 
+                                    border-radius: 50px;
                                     background: white;
-                                    text-align: right;" />  
+                                    text-align: right;" />
                         </button>
-        
+
                         <button *ngIf="car_type == true" round  style="background:transparent">
-                            <img  src="assets/icon/carro.png" 
-                                  style="width: 45px; 
-                                    height : 24px; 
+                            <img  src="assets/icon/car.png"
+                                  style="width: 45px;
+                                    height : 24px;
                                     max-width: 45px;
                                     max-height: 24px;
-                                    border-radius: 50px; 
+                                    border-radius: 50px;
                                     background: white;
-                                    text-align: right;" />   
+                                    text-align: right;" />
                         </button>
 
                     </ion-buttons>
-                                     
-                    
+
+
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -157,6 +157,6 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
-              
+
 </ion-content>
 

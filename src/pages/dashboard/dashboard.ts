@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map';
 import { ZonaZipp } from '../zona-zipp/zona-zipp';
 // model
 import { Zona_Zipp } from '../../models/zonazipp';
-import { ReservaZona } from '../../models/reservazipp'; 
+import { ReservaZona } from '../../models/reservazipp';
 import { User } from '../../models/user';
 
 // import providers
@@ -20,6 +20,7 @@ import { ZippService } from '../../providers/zipp.service';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { GLOBAL } from '../../providers/global';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare var google;
 
@@ -57,13 +58,13 @@ export class Dashboard {
   public url: string;
   public zonaszipp: Zona_Zipp[];
 
-  constructor(public viewCtrl: ViewController, 
+  constructor(public viewCtrl: ViewController,
               private zone: NgZone,
-              public navCtrl: NavController, 
+              public navCtrl: NavController,
               private _userService: UserService,
-              public alertCtrl: AlertController, 
+              public alertCtrl: AlertController,
               public loadingCtrl: LoadingController,
-              private _zonazippService: ZippService, 
+              private _zonazippService: ZippService,
               private geolocation: Geolocation,
               public _http: Http) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -82,7 +83,8 @@ export class Dashboard {
     console.log('¡Dashboard cargado!');
     this.identity = this._userService.getIdentity();
     this.getUserById();
-    this.initMap();
+    //this.initMap();
+    this.inicio();
     this.getZonasZippByUser();
   }
 
@@ -111,11 +113,10 @@ export class Dashboard {
     this.geoCode(this.geo);
     this.placeid = this.location.place_id
   }
-  //Metodo para cargar el mapa en el lugar de la lista que el usuario selecciono
   GoTo(){
     return window.location.href = 'https://www.google.com/maps/place/?q=place_id:'+this.placeid;
   }
-  
+
   //Metodo para convertir la direccion en coordenadas gps
   geoCode(item) {
     let data=item.place_id;
@@ -132,40 +133,53 @@ export class Dashboard {
       }else {
         console.log('Geocode was not successful for the following reason: ' + status);
       }
-      
+
    });
   }
 
   //Metodo para desplegar el menu de filtro
-  
-  
+  inicio(){
+    let alert = this.alertCtrl.create({
+      title: 'Bienvenido a Zapp!',
+      subTitle: 'Que tipo de vehiculo deseas Parquear? ',
+      buttons: [
+        {
+        text: 'Carro',
+        handler: data => {
+            this.initMapCar();
+        }
+        },
+        {
+          text: 'Moto',
+        handler: data => {
+            this.initMapMo();
+        }
+        },
+        {
+          text: 'Bicicleta/Patineta',
+          handler: data => {
+            this.initMapBike();
+        }
+        },
+        {
+          text: 'Todos los Vehiculos',
+          handler: data => {
+            this.initMap();
+        }
+        }
+      ]
+  });
+  alert.present();
+
+  }
+
 ngDoCheck(){
   	this.identity = this._userService.getIdentity();
   }
 
 
-   
-  initMapFilter(lat:number, lng:number){
-    // Obtener geolocalización
-     
-       
-       let latLng = new google.maps.LatLng(lat,lng);
-       
-       let mapOptions = {
-         center: latLng,
-         disableDefaultUI: true,
-         zoom: 16,
-         mapTypeId: google.maps.MapTypeId.ROADMAP,
-         styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":20},{"color":"#ececec"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ececec"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"lightness":21},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#303030"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"saturation":"-100"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.government","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"poi.place_of_worship","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"geometry.stroke","stylers":[{"lightness":"-61"},{"gamma":"0.00"},{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#dadada"},{"lightness":17}]}]
-       }
-       
-      
-       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
 
-       //invocación de las zonas zipp al mapa
-       this.getZonasZipp();
-       
-     }
+
   //metodo para obtener usuariopor id y actualizar los datos
   getUserById(){
     this._userService.getUser(this.user._id).subscribe(
@@ -175,12 +189,12 @@ ngDoCheck(){
             }else{
                 this.user = response.user;
                 localStorage.setItem('identity', JSON.stringify(this.user));
-                                 
+
             }
         },
         error => {
             console.log(<any>error);
-            
+
         }
     );
 
@@ -192,10 +206,10 @@ ngDoCheck(){
     this._zonazippService.getReservasZippByUser(this.user._id).subscribe(
         response => {
             if(!response.reservas_zipp){
-                
+
             }else{
-                this.reservaszipp = response.reservas_zipp;  
-                   
+                this.reservaszipp = response.reservas_zipp;
+
             }
         },
         error => {
@@ -203,24 +217,45 @@ ngDoCheck(){
         }
     );
   }
-  
+
   estReserva(estado){
     return this.reservaszipp.filter(y=>y.estado_reserva == estado);
   }
-  
+
   buttonClick(reserva){
     this.navCtrl.setRoot(ZonaZipp, {zonazipp: reserva.zonazipp._id});
   }
 
   // Display google maps
 
+  initMapFilter(lat:number, lng:number){
+    // Obtener geolocalización
+
+
+       let latLng = new google.maps.LatLng(lat,lng);
+
+       let mapOptions = {
+         center: latLng,
+         disableDefaultUI: true,
+         zoom: 16,
+         mapTypeId: google.maps.MapTypeId.ROADMAP,
+         styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":20},{"color":"#ececec"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ececec"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"lightness":21},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#303030"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"saturation":"-100"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.government","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"poi.place_of_worship","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"geometry.stroke","stylers":[{"lightness":"-61"},{"gamma":"0.00"},{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#dadada"},{"lightness":17}]}]
+       }
+
+
+       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+       //invocación de las zonas zipp al mapa
+       this.getZonasZipp();
+
+     }
 
   initMap(){
    // Obtener geolocalización
     this.geolocation.getCurrentPosition().then((position) => {
-      
+
       let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      
+
       let mapOptions = {
         center: latLng,
         disableDefaultUI: true,
@@ -228,29 +263,143 @@ ngDoCheck(){
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":20},{"color":"#ececec"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ececec"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"lightness":21},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#303030"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"saturation":"-100"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.government","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"poi.place_of_worship","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"geometry.stroke","stylers":[{"lightness":"-61"},{"gamma":"0.00"},{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#dadada"},{"lightness":17}]}]
       }
-      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
+
+
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
       // marcador
       let geoMarker = new google.maps.Marker({
-        icon : 'assets/icon/car.png',
+        icon : 'assets/icon/icon-zipp.png',
         map: this.map,
         animation: google.maps.Animation.DROP,
         position: latLng
-      }); 
+      });
 
       //invocación de las zonas zipp al mapa
       this.getZonasZipp();
-      
+
     }, (err) => {
            console.log(err);
     });
   }
 
-  // Metodo para obtener las Zonas para refrescar el mapa con las zonas disponibles 
+  initMapMo(){
+
+    let loader = this.loadingCtrl.create({
+      content: "Cargando zonas ZIPP para motocicletas...",
+      duration: 4000
+    });
+    loader.present();
+
+    // Obtener geolocalización
+    this.geolocation.getCurrentPosition().then((position) => {
+
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      let mapOptions = {
+        center: latLng,
+        disableDefaultUI: true,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":20},{"color":"#ececec"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ececec"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"lightness":21},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#303030"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"saturation":"-100"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.government","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"poi.place_of_worship","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"geometry.stroke","stylers":[{"lightness":"-61"},{"gamma":"0.00"},{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#dadada"},{"lightness":17}]}]
+      }
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+      // marcador
+      let geoMarker = new google.maps.Marker({
+        icon : 'assets/icon/moto.png',
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: latLng
+      });
+
+      //invocación de las zonas zipp al mapa
+      this.getZonasZippMoto();
+
+    }, (err) => {
+           console.log(err);
+    });
+  }
+
+  initMapCar(){
+
+    let loader = this.loadingCtrl.create({
+      content: "Cargando zonas ZIPP para carros...",
+      duration: 4000
+    });
+    loader.present();
+     // Obtener geolocalización
+    this.geolocation.getCurrentPosition().then((position) => {
+
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      let mapOptions = {
+        center: latLng,
+        disableDefaultUI: true,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":20},{"color":"#ececec"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ececec"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"lightness":21},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#303030"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"saturation":"-100"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.government","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"poi.place_of_worship","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"geometry.stroke","stylers":[{"lightness":"-61"},{"gamma":"0.00"},{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#dadada"},{"lightness":17}]}]
+      }
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+      // marcador
+      let geoMarker = new google.maps.Marker({
+        icon : 'assets/icon/icon-zipp.png',
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: latLng
+      });
+
+      //invocación de las zonas zipp al mapa
+      this.getZonasZippCar();
+
+    }, (err) => {
+           console.log(err);
+    });
+  }
+
+  initMapBike(){
+
+    let loader = this.loadingCtrl.create({
+      content: "Cargando zonas ZIPP para Bicicleta/Patineta...",
+      duration: 4000
+    });
+    loader.present();
+    // Obtener geolocalización
+    this.geolocation.getCurrentPosition().then((position) => {
+      let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+      let mapOptions = {
+        center: latLng,
+        disableDefaultUI: true,
+        zoom: 16,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: [{"featureType":"all","elementType":"labels.text.fill","stylers":[{"saturation":36},{"color":"#333333"},{"lightness":40}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"visibility":"on"},{"color":"#ffffff"},{"lightness":16}]},{"featureType":"all","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"administrative","elementType":"geometry.fill","stylers":[{"color":"#fefefe"},{"lightness":20}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#fefefe"},{"lightness":17},{"weight":1.2}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"lightness":20},{"color":"#ececec"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#f0f0ef"}]},{"featureType":"landscape.man_made","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"landscape.natural","elementType":"all","stylers":[{"visibility":"on"},{"color":"#ececec"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"lightness":21},{"visibility":"off"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#d4d4d4"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#303030"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"saturation":"-100"}]},{"featureType":"poi.attraction","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.government","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#dedede"},{"lightness":21}]},{"featureType":"poi.place_of_worship","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"poi.school","elementType":"geometry.stroke","stylers":[{"lightness":"-61"},{"gamma":"0.00"},{"visibility":"off"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffffff"},{"lightness":17}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#ffffff"},{"lightness":29},{"weight":0.2}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":18}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#ffffff"},{"lightness":16}]},{"featureType":"transit","elementType":"geometry","stylers":[{"color":"#f2f2f2"},{"lightness":19}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#dadada"},{"lightness":17}]}]
+      }
+      this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+
+      // marcador
+      let geoMarker = new google.maps.Marker({
+        icon : 'assets/icon/patineta.png',
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: latLng
+      });
+
+      //invocación de las zonas zipp al mapa
+      this.getZonasZippBike();
+
+    }, (err) => {
+           console.log(err);
+    });
+  }
+
+  // Metodo para obtener las Zonas ZIPP para refrescar la base de datos
   getZonasZipp(){
     this._zonazippService.getZonasZipp().subscribe(
       (response) => {
         if(!response){
-                
+
         }else{
           this.zonaszipp = response.zonaszipp;
           this.addMarker(this.zonaszipp);
@@ -263,7 +412,51 @@ ngDoCheck(){
   }
 
 
-  
+  getZonasZippCar(){
+    this._zonazippService.getZonasZipp().subscribe(
+      (response) => {
+        if(!response){
+
+        }else{
+          this.zonaszipp = response.zonaszipp;
+          this.addMarkerCar(this.zonaszipp);
+        }
+      },
+      error => {
+        console.log(<any>error);
+      }
+    );
+  }
+  getZonasZippMoto(){
+    this._zonazippService.getZonasZipp().subscribe(
+      (response) => {
+        if(!response){
+
+        }else{
+          this.zonaszipp = response.zonaszipp;
+          this.addMarkerMoto(this.zonaszipp);
+        }
+      },
+      error => {
+        console.log(<any>error);
+      }
+    );
+  }
+  getZonasZippBike(){
+    this._zonazippService.getZonasZipp().subscribe(
+      (response) => {
+        if(!response){
+
+        }else{
+          this.zonaszipp = response.zonaszipp;
+          this.addMarkerBike(this.zonaszipp);
+        }
+      },
+      error => {
+        console.log(<any>error);
+      }
+    );
+  }
 
   // Método que añade la información a los marcadores de cada zona zipp
   addInfoWindow(zonazipp, content, zona_zipp) {
@@ -280,29 +473,56 @@ ngDoCheck(){
         this.gozonazipp(zona_zipp);
       });
     });
-    
+
   }
 
-   
+
   // Método para añadir los marcadores de las zonas zipp
   addMarker(zonaszipp) {
-    for(let zonazipp of zonaszipp) {
-       if(zonazipp.estado_zonazipp){
+    for(let zonazipp of zonaszipp)
+      if(zonazipp.estado_zonazipp){
         var position = new google.maps.LatLng(zonazipp.lat, zonazipp.lng);
         var marker_zipp = new google.maps.Marker({
           icon : 'assets/icon/garage.png',
           animation: google.maps.Animation.DROP,
           position: position
-        }); 
+        });
 
         marker_zipp.setMap(this.map);
 
         var content = '<div id="iw-container">' +
-                      '<div class="iw-content">'+ 
-                        '<p><strong>Dirección: </strong>'+ zonazipp.address + '</p>' + 
-                        '<p><strong>Número de espacios: </strong>'+ zonazipp.number_spaces + '</p>' +
+                      '<div class="iw-content">'+
+                        '<p><strong>Dirección: </strong>'+ zonazipp.address + '</p>' +
+                        '<img src="'+zonazipp.image_zona_zipp+'" style="width:100px;height:60px;">' +
                         '<p><strong>Costo por hora: </strong>$'+ zonazipp.price + '</p>' +
-                        '<button class="iw-button" id="gMaps" style="background-color: indigo; color:white ;">Ver zona</button>'+
+                        '<button class="iw-bottom" id="gMaps" style="background-color: indigo; color:white ;" >Ver Zapp</button>'+
+                      '</div>'+
+                      '<div class="iw-bottom-gradient"></div>' +
+                    '</div>';
+
+        this.addInfoWindow(marker_zipp, content, zonazipp);
+      }
+  }
+
+  addMarkerCar(zonaszipp) {
+    for(let zonazipp of zonaszipp) {
+      if(zonazipp.car_type==true){
+        if(zonazipp.estado_zonazipp){
+        var position = new google.maps.LatLng(zonazipp.lat, zonazipp.lng);
+        var marker_zipp = new google.maps.Marker({
+          icon : 'assets/icon/garage.png',
+          animation: google.maps.Animation.DROP,
+          position: position
+        });
+
+        marker_zipp.setMap(this.map);
+
+        var content = '<div id="iw-container">' +
+                      '<div class="iw-content">'+
+                        '<p><strong>Dirección: </strong>'+ zonazipp.address + '</p>' +
+                        '<img src="'+zonazipp.image_zona_zipp+'" style="width:100px;height:60px;">' +
+                        '<p><strong>Costo por hora: </strong>$'+ zonazipp.price + '</p>' +
+                        '<button class="iw-bottom" id="gMaps" style="background-color: indigo; color:white ;" >Ver Zapp</button>'+
                       '</div>'+
                       '<div class="iw-bottom-gradient"></div>' +
                     '</div>';
@@ -310,14 +530,72 @@ ngDoCheck(){
         this.addInfoWindow(marker_zipp, content, zonazipp);
       }
     }
-  } 
-  
+  }
+}
+
+
+addMarkerMoto(zonaszipp) {
+  for(let zonazipp of zonaszipp) {
+    if(zonazipp.motorcycle_type==true){
+      if(zonazipp.estado_zonazipp){
+        var position = new google.maps.LatLng(zonazipp.lat, zonazipp.lng);
+        var marker_zipp = new google.maps.Marker({
+          icon : 'assets/icon/garage.png',
+          animation: google.maps.Animation.DROP,
+          position: position
+        });
+
+        marker_zipp.setMap(this.map);
+
+        var content = '<div id="iw-container">' +
+                      '<div class="iw-content">'+
+                        '<p><strong>Dirección: </strong>'+ zonazipp.address + '</p>' +
+                        '<img src="'+zonazipp.image_zona_zipp+'" style="width:100px;height:60px;">' +
+                        '<p><strong>Costo por hora: </strong>$'+ zonazipp.price + '</p>' +
+                        '<button class="iw-bottom" id="gMaps" style="background-color: indigo; color:white ;" >Ver Zapp</button>'+
+                      '</div>'+
+                      '<div class="iw-bottom-gradient"></div>' +
+                    '</div>';
+        this.addInfoWindow(marker_zipp, content, zonazipp);
+      }
+    }
+  }
+}
+
+addMarkerBike(zonaszipp) {
+  for(let zonazipp of zonaszipp) {
+    if(zonazipp.bike_type==true){
+      if(zonazipp.estado_zonazipp){
+        var position = new google.maps.LatLng(zonazipp.lat, zonazipp.lng);
+        var marker_zipp = new google.maps.Marker({
+          icon : 'assets/icon/garage.png',
+          animation: google.maps.Animation.DROP,
+          position: position
+        });
+
+        marker_zipp.setMap(this.map);
+
+        var content = '<div id="iw-container">' +
+                      '<div class="iw-content">'+
+                        '<p><strong>Dirección: </strong>'+ zonazipp.address + '</p>' +
+                        '<img src="'+zonazipp.image_zona_zipp+'" style="width:100px;height:60px;">' +
+                        '<p><strong>Costo por hora: </strong>$'+ zonazipp.price + '</p>' +
+                        '<button  class="iw-bottom" id="gMaps" style="background-color: indigo; color:white ;" >Ver Zapp</button>'+
+                      '</div>'+
+                      '<div class="iw-bottom-gradient"></div>' +
+                    '</div>';
+
+        this.addInfoWindow(marker_zipp, content, zonazipp);
+      }
+    }
+  }
+}
   // route to component of zona zipp view
   gozonazipp(zonazipp){
     this.navCtrl.setRoot(ZonaZipp, {zonazipp: zonazipp._id});
   }
-  
+
   Refresh(){
     this.navCtrl.setRoot(Dashboard);
   }
-} 
+}
