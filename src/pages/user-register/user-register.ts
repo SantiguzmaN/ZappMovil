@@ -19,7 +19,6 @@ export class UserRegister {
 
   public user: User;
   public status: string;
-
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController, 
               public loadingCtrl: LoadingController, 
@@ -27,12 +26,10 @@ export class UserRegister {
   {
     this.user = new User('','','','','','','ROLE_CONDUCTOR','','',true,'0','');
   }
-
-  // userRegister charged
+ // userRegister charged
   ionViewDidLoad() {
     console.log('¡UserRegister cargado!');
   }
-
   // submit: register new user
   onSubmit(){
     this.user.fechaC = new Date().toLocaleString();
@@ -47,8 +44,6 @@ export class UserRegister {
             duration: 5000
           });
           loader.present();
-          
-
           // Start alert register ok 
           let confirm = this.alertCtrl.create({
             title: 'Registro satisfactorio',
