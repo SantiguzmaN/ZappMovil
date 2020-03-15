@@ -1,4 +1,4 @@
-// import ionic components
+﻿// import ionic components
 import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, NavParams } from 'ionic-angular';
 
@@ -215,6 +215,7 @@ export class ZonaZipp {
 
           }
       },
+
       error => {
           console.log(<any>error);                         
       }
@@ -224,6 +225,7 @@ export class ZonaZipp {
   goDashboard(){
     this.navCtrl.setRoot(Dashboard);
   }
+
   getZonasZippByUser(){
     this._zonazippService.getReservasZippByUser(this.user._id).subscribe(
         response => {
